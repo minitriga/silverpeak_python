@@ -1,3 +1,3 @@
-from silverpeak import silverpeak
+from silverpeak import *
  
 test()
