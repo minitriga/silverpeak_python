@@ -1,3 +1,0 @@
-from silverpeak import *
- 
-test()
