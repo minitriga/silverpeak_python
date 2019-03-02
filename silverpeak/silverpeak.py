@@ -215,4 +215,70 @@ class Silverpeak(object):
         url = '{0}/reachability/gms/{1}'.format(self.base_url, id)
         return self._get(self.session, url)
 
+    def get_groups(self):
+        """
+        Get all orchestrator groups
+        :return: Result named tuple.
+        """
+        url = '{0}/gms/group'.format(self.base_url)
+        return self._get(self.session, url)
+
+    def get_group(self, id):
+        """
+        Get a sigle group from orchestrator
+        :param id: Group Primary Key looks like 10.Network
+        :return: Result named tuple.
+        """
+        url = '{0}/gms/group/{1}'.format(self.base_url, id)
+        return self._get(self.session, url)
+
+    def get_group_root(self):
+        """
+        Get root group
+        :return: Result named tuple.
+        """
+        url = '{0}/gms/group/root'.format(self.base_url)
+        return self._get(self.session, url)
+    
+    def get_grnodes(self):
+        """
+        Get appliance positions on a map for topology
+        :return: Result named tuple.
+        """
+        url = '{0}/gms/grNode'.format(self.base_url)
+        return self._get(self.session, url)
+
+    def get_grnode(self, id):
+        """
+        Get appliance position by graphical node primary key
+        :param id: Node Primary Key looks like 0.GrNode
+        :return: Result named tuple.
+        """
+        url = '{0}/gms/grNode/{1}'.format(self.base_url, id)
+        return self._get(self.session, url)
+    
+    def get_discovered(self):
+        """
+        Reurns all the discovered appliances
+        :return: Result named tuple
+        """
+        url = '{0}/appliance/discovered'.format(self.base_url)
+        return self._get(self.session, url)
+   
+    def get_approved(self):
+        """
+        Reurns all approved appliances
+        :return: Result named tuple
+        """
+        url = '{0}/appliance/approved'.format(self.base_url)
+        return self._get(self.session, url)
+
+    def get_denied(self):
+        """
+        Reurns all the denied appliances
+        :return: Result named tuple
+        """
+        url = '{0}/appliance/denied'.format(self.base_url)
+        return self._get(self.session, url)
+
 
