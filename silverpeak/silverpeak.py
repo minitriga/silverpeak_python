@@ -196,3 +196,23 @@ class Silverpeak(object):
         """
         url = '{0}/appliance/{1}'.format(self.base_url, nepk)
         return self._get(self.session, url)
+
+    def get_reach_app(self, id):
+        """
+        Get the reachability status from the appliance
+        :param id: Device Primary Key for Appliance
+        :return: Result named tuple.
+        """
+        url = '{0}/reachability/appliance/{1}'.format(self.base_url, id)
+        return self._get(self.session, url)
+
+    def get_reach_gms(self, id):
+        """
+        Get the reachability status from the orchestrator
+        :param id: Device Primary Key for Appliance
+        :return: Result named tuple.
+        """
+        url = '{0}/reachability/gms/{1}'.format(self.base_url, id)
+        return self._get(self.session, url)
+
+
