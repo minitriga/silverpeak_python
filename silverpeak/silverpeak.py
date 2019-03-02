@@ -187,3 +187,12 @@ class Silverpeak(object):
     def get_appliances(self):
         url = '{0}/appliance'.format(self.base_url)
         return self._get(self.session, url)
+
+    def get_appliance(self, nepk):
+        """
+        Get device information for one Appliance
+        :param nepk: Device Primary Key for Appliance
+        :return: Result named tuple 
+        """
+        url = '{0}/appliance/{1}'.format(self.base_url, nepk)
+        return self._get(self.session, url)
