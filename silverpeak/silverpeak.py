@@ -34,12 +34,8 @@ def parse_http_success(response):
     if response.request.method in ['GET']:
         reason = HTTP_RESPONSE_CODES[response.status_code]
         error = ''
-        if response.json().get('data'):
-            json_response = response.json()['data']
-        elif response.json().get('config'):
-            json_response = response.json()['config']
-        elif response.json().get('templateDefinition'):
-            json_response = response.json()['templateDefinition']
+        if response.json():
+            json_response = response.json()
         else:
             json_response = dict()
             reason = HTTP_RESPONSE_CODES[response.status_code]
@@ -184,3 +180,10 @@ class Silverpeak(object):
             json = dict()
 
         return parse_response(session.post(url=url, headers=headers, data=data, json=json, timeout=timeout))
+    
+
+
+
+    def get_appliances(self):
+        url = '{0}/appliance'.format(self.base_url)
+        return self._get(self.session, url)
