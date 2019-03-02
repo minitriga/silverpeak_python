@@ -185,6 +185,10 @@ class Silverpeak(object):
 
 
     def get_appliances(self):
+        """
+        Get all appliance information
+        :return: Result named tuple.
+        """
         url = '{0}/appliance'.format(self.base_url)
         return self._get(self.session, url)
 
