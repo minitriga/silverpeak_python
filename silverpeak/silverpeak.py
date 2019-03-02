@@ -192,7 +192,7 @@ class Silverpeak(object):
         """
         Get device information for one Appliance
         :param nepk: Device Primary Key for Appliance
-        :return: Result named tuple 
+        :return: Result named tuple.
         """
         url = '{0}/appliance/{1}'.format(self.base_url, nepk)
         return self._get(self.session, url)
