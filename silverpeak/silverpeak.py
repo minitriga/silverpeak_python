@@ -238,6 +238,28 @@ class Silverpeak(object):
         """
         url = '{0}/gms/grNode/{1}'.format(self.base_url, id)
         return self._get(self.session, url)
+    
+    def get_discovered(self):
+        """
+        Reurns all the discovered appliances
+        :return: Result named tuple
+        """
+        url = '{0}/appliance/discovered'.format(self.base_url)
+        return self._get(self.session, url)
+   
+    def get_approved(self):
+        """
+        Reurns all approved appliances
+        :return: Result named tuple
+        """
+        url = '{0}/appliance/approved'.format(self.base_url)
+        return self._get(self.session, url)
 
-
+    def get_denied(self):
+        """
+        Reurns all the denied appliances
+        :return: Result named tuple
+        """
+        url = '{0}/appliance/denied'.format(self.base_url)
+        return self._get(self.session, url)
 
