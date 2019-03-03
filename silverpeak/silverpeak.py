@@ -110,7 +110,7 @@ class Silverpeak(object):
         if self.disable_warnings:
             requests.packages.urllib3.disable_warnings()
 
-        self.base_url = 'https://{0}:{1}/gms/rest'.format(
+        self.base_url = 'https://{}:{}/gms/rest'.format(
             self.sp_server,
             self.sp_port
         )
@@ -132,14 +132,14 @@ class Silverpeak(object):
         try:
             login_result = self._post(
                 session=self.session,
-                url='{0}/authentication/login'.format(self.base_url),
+                url='{}/authentication/login'.format(self.base_url),
                 headers={'Content-Type': 'application/json'},
                 json=requestData,
                 timeout=self.timeout
             )
         except ConnectionError:
             raise LoginTimeoutError(
-                'Could not connect to {0}'.format(self.sp_server))
+                'Could not connect to {}'.format(self.sp_server))
 
         if login_result.response.text.startswith('wrong credentials'):
             raise LoginCredentialsError(
@@ -193,34 +193,34 @@ class Silverpeak(object):
         Get all appliance information
         :return: Result named tuple.
         """
-        url = '{0}/appliance'.format(self.base_url)
+        url = '{}/appliance'.format(self.base_url)
         return self._get(self.session, url)
 
-    def get_appliance(self, nepk):
+    def get_appliance(self, applianceID):
         """
         Get device information for one Appliance
-        :param nepk: Device Primary Key for Appliance
+        :param applianceID: Device Primary Key for Appliance
         :return: Result named tuple.
         """
-        url = '{0}/appliance/{1}'.format(self.base_url, nepk)
+        url = '{}/appliance/{}'.format(self.base_url, applianceID)
         return self._get(self.session, url)
 
-    def get_reach_app(self, id):
+    def get_reach_app(self, applianceID):
         """
         Get the reachability status from the appliance
-        :param id: Device Primary Key for Appliance
+        :param applianceID: Device Primary Key for Appliance
         :return: Result named tuple.
         """
-        url = '{0}/reachability/appliance/{1}'.format(self.base_url, id)
+        url = '{}/reachability/appliance/{}'.format(self.base_url, applianceID)
         return self._get(self.session, url)
 
-    def get_reach_gms(self, id):
+    def get_reach_gms(self, applianceID):
         """
         Get the reachability status from the orchestrator
-        :param id: Device Primary Key for Appliance
+        :param applianceID: Device Primary Key for Appliance
         :return: Result named tuple.
         """
-        url = '{0}/reachability/gms/{1}'.format(self.base_url, id)
+        url = '{}/reachability/gms/{}'.format(self.base_url, applianceID)
         return self._get(self.session, url)
 
     def get_groups(self):
@@ -228,16 +228,16 @@ class Silverpeak(object):
         Get all orchestrator groups
         :return: Result named tuple.
         """
-        url = '{0}/gms/group'.format(self.base_url)
+        url = '{}/gms/group'.format(self.base_url)
         return self._get(self.session, url)
 
-    def get_group(self, id):
+    def get_group(self, groupID):
         """
         Get a sigle group from orchestrator
-        :param id: Group Primary Key looks like 10.Network
+        :param groupID: Group Primary Key looks like 10.Network
         :return: Result named tuple.
         """
-        url = '{0}/gms/group/{1}'.format(self.base_url, id)
+        url = '{}/gms/group/{}'.format(self.base_url, groupID)
         return self._get(self.session, url)
 
     def get_group_root(self):
@@ -245,7 +245,7 @@ class Silverpeak(object):
         Get root group
         :return: Result named tuple.
         """
-        url = '{0}/gms/group/root'.format(self.base_url)
+        url = '{}/gms/group/root'.format(self.base_url)
         return self._get(self.session, url)
 
     def get_grnodes(self):
@@ -253,16 +253,16 @@ class Silverpeak(object):
         Get appliance positions on a map for topology
         :return: Result named tuple.
         """
-        url = '{0}/gms/grNode'.format(self.base_url)
+        url = '{}/gms/grNode'.format(self.base_url)
         return self._get(self.session, url)
 
-    def get_grnode(self, id):
+    def get_grnode(self, nodeID):
         """
         Get appliance position by graphical node primary key
-        :param id: Node Primary Key looks like 0.GrNode
+        :param nodeID: Node Primary Key looks like 0.GrNode
         :return: Result named tuple.
         """
-        url = '{0}/gms/grNode/{1}'.format(self.base_url, id)
+        url = '{}/gms/grNode/{}'.format(self.base_url, nodeID)
         return self._get(self.session, url)
 
     def get_discovered(self):
@@ -270,7 +270,7 @@ class Silverpeak(object):
         Reurns all the discovered appliances
         :return: Result named tuple
         """
-        url = '{0}/appliance/discovered'.format(self.base_url)
+        url = '{}/appliance/discovered'.format(self.base_url)
         return self._get(self.session, url)
 
     def get_approved(self):
@@ -278,7 +278,7 @@ class Silverpeak(object):
         Reurns all approved appliances
         :return: Result named tuple
         """
-        url = '{0}/appliance/approved'.format(self.base_url)
+        url = '{}/appliance/approved'.format(self.base_url)
         return self._get(self.session, url)
 
     def get_denied(self):
@@ -286,7 +286,7 @@ class Silverpeak(object):
         Reurns all the denied appliances
         :return: Result named tuple
         """
-        url = '{0}/appliance/denied'.format(self.base_url)
+        url = '{}/appliance/denied'.format(self.base_url)
         return self._get(self.session, url)
 
     def get_interfaces(self, applianceID, cashed='true'):
