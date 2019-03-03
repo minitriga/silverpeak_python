@@ -289,13 +289,13 @@ class Silverpeak(object):
         url = '{0}/appliance/denied'.format(self.base_url)
         return self._get(self.session, url)
 
-    def get_interfaces(self, id, cashed='true'):
+    def get_interfaces(self, applianceID, cashed='true'):
         """
         Reurns node configuration data from orchestrator database or from the specified appliance
-        :param id: The node ID of the appliance
+        :param applianceID: The node ID of the appliance
         :param cashed: True/false Get from orchestrator/get from appliance
         :return: Result named tuple
         """
-        url = '{0}/interfaceState/{1}?cached={2}'.format(
-            self.base_url, id, cashed.lower())
+        url = '{}/interfaceState/{}?cached={}'.format(
+            self.base_url, applianceID, cashed.lower())
         return self._get(self.session, url)
