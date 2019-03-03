@@ -9,13 +9,13 @@ The API is documented on the orchestrator host and can be found by going to
 
 ### Installation
 ```bash
-
+pip install silverpeak
 ```
 
 ### Instantiate a connection to a vManage device
 ```python
 from silverpeak import *
-sp = Silverpeak(user='admin', user_pass='admin', vmanage_server='192.168.1.2')
+sp = Silverpeak(user='admin', user_pass='admin', sp_server='192.168.1.2')
 ```
 
 ### Call methods
