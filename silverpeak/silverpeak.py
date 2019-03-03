@@ -24,7 +24,8 @@ HTTP_RESPONSE_CODES.update(HTTP_ERROR_CODES)
 Result = namedtuple('Result', [
     'ok', 'status_code', 'error', 'reason', 'data', 'response'
 ])
- 
+
+
 def parse_http_success(response):
     """
     HTTP 2XX responses
@@ -55,6 +56,7 @@ def parse_http_success(response):
     )
     return result
 
+
 def parse_http_error(response):
     """
     HTTP 4XX and 5XX responses
@@ -79,6 +81,7 @@ def parse_http_error(response):
         response=response,
     )
     return result
+
 
 def parse_response(response):
     """
@@ -105,7 +108,7 @@ class Silverpeak(object):
         self.disable_warnings = disable_warnings
 
         if self.disable_warnings:
-             requests.packages.urllib3.disable_warnings()
+            requests.packages.urllib3.disable_warnings()
 
         self.base_url = 'https://{0}:{1}/gms/rest'.format(
             self.sp_server,
@@ -113,17 +116,17 @@ class Silverpeak(object):
         )
 
         self.session = requests.session()
-        
+
         if not self.verify:
             self.session.verify = self.verify
-     
+
         if self.auto_login:
             self.login_result = self.login()
 
     def login(self):
 
         requestData = {
-            "user": self.user, "password": self.user_pass 
+            "user": self.user, "password": self.user_pass
         }
 
         try:
@@ -135,10 +138,12 @@ class Silverpeak(object):
                 timeout=self.timeout
             )
         except ConnectionError:
-            raise LoginTimeoutError('Could not connect to {0}'.format(self.sp_server))
-        
+            raise LoginTimeoutError(
+                'Could not connect to {0}'.format(self.sp_server))
+
         if login_result.response.text.startswith('wrong credentials'):
-            raise LoginCredentialsError('Could not login to device, check user credentials')
+            raise LoginCredentialsError(
+                'Could not login to device, check user credentials')
 
         else:
             return login_result
@@ -154,10 +159,11 @@ class Silverpeak(object):
         :return:
         """
         if headers is None:
-            headers = {'Connection': 'keep-alive', 'Content-Type': 'application/json'}
+            headers = {'Connection': 'keep-alive',
+                       'Content-Type': 'application/json'}
 
         return parse_response(session.get(url=url, headers=headers, timeout=timeout))
-    
+
     @staticmethod
     def _post(session, url, headers=None, data=None, json=None, timeout=10):
         """
@@ -171,7 +177,8 @@ class Silverpeak(object):
         """
         if headers is None:
             # add default headers for post
-            headers = {'Connection': 'keep-alive', 'Content-Type': 'application/json'}
+            headers = {'Connection': 'keep-alive',
+                       'Content-Type': 'application/json'}
 
         if data is None:
             data = dict()
@@ -180,9 +187,6 @@ class Silverpeak(object):
             json = dict()
 
         return parse_response(session.post(url=url, headers=headers, data=data, json=json, timeout=timeout))
-    
-
-
 
     def get_appliances(self):
         """
@@ -243,7 +247,7 @@ class Silverpeak(object):
         """
         url = '{0}/gms/group/root'.format(self.base_url)
         return self._get(self.session, url)
-    
+
     def get_grnodes(self):
         """
         Get appliance positions on a map for topology
@@ -260,7 +264,7 @@ class Silverpeak(object):
         """
         url = '{0}/gms/grNode/{1}'.format(self.base_url, id)
         return self._get(self.session, url)
-    
+
     def get_discovered(self):
         """
         Reurns all the discovered appliances
@@ -268,7 +272,7 @@ class Silverpeak(object):
         """
         url = '{0}/appliance/discovered'.format(self.base_url)
         return self._get(self.session, url)
-   
+
     def get_approved(self):
         """
         Reurns all approved appliances
@@ -284,12 +288,12 @@ class Silverpeak(object):
         """
         url = '{0}/appliance/denied'.format(self.base_url)
         return self._get(self.session, url)
-    
+
     def get_interfaces(self, interfaceID, cashed='true'):
         """
         Reurns **********
         :return: Result ***********
         """
-        url = '{0}/interfaceState/{}?cached={}'.format(self.base_url, interfaceID, cashed.lower())
+        url = '{0}/interfaceState/{}?cached={}'.format(
+            self.base_url, interfaceID, cashed.lower())
         return self._get(self.session, url)
-
