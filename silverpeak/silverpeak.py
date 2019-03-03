@@ -42,9 +42,12 @@ def parse_http_success(response):
             reason = HTTP_RESPONSE_CODES[response.status_code]
             error = 'No data received from device'
     else:
-        json_response = dict()
         reason = HTTP_RESPONSE_CODES[response.status_code]
         error = ''
+        if response.text:
+            json_response = response.text
+        else:
+            json_response = dict()
 
     result = Result(
         ok=response.ok,
@@ -299,3 +302,65 @@ class Silverpeak(object):
         url = '{}/interfaceState/{}?cached={}'.format(
             self.base_url, applianceID, cashed.lower())
         return self._get(self.session, url)
+
+    def get_device_alarms(self, applianceID, view='all', severity='', order='', maxAlarms=5):
+        """
+        Reurns active, historical, or all alarms for appliances whos id's are provided in the request body
+        :param applianceID: The node ID of the appliance
+        :param view: Filters arams by active, closed, all
+        :param severity: Filters alarms by severity (warning, minor, major, critical)
+        :param order: Order by alarm severity (true, false)
+        :param maxAlarms: How many alarms to show (default=5)
+        :return: Result named tuple
+        """
+        url = '{}/alarm/appliance?view={}&maxAlarms={}'.format(
+            self.base_url, view.lower(), maxAlarms)
+
+        if severity:
+            url = '{}&severity={}'.format(url, severity)
+
+        if order:
+             url = '{}&order={}'.format(url, order)
+
+        return self._post(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                json=applianceID,
+                timeout=self.timeout
+               )
+
+    def get_alarms(self, view='all', severity=''):
+        """
+        Reurns active, historical, or all alarms for appliances whos id's are provided in the request body
+        :param view: Filters arams by active, closed, all
+        :param severity: Filters alarms by severity (warning, minor, major, critical)
+        :return: Result named tuple
+        """
+        url = '{}/alarm/gms?view={}'.format(self.base_url, view.lower())
+
+        if severity:
+            url = '{}&severity={}'.format(url, severity)
+
+        return self._get(self.session, url)
+   
+    def get_alarm_summary(self):
+        """
+        Returns summary of active Orchestrator alarms as well as summary of active alarms across all appliances
+        :return: Result named tuple
+        """
+        url = '{}/alarm/summary'.format(self.base_url)
+
+        return self._get(self.session, url)
+
+    def get_alarm_summary_type(self, alarmType):
+        """
+        Returns summary of active Orchestrator alarms or summary of active alarms across all appliances
+        :param alarmType: Alarm Type (gms,appliance)
+        :return: Result named tuple
+        """
+        url = '{}/alarm/summary/{}'.format(self.base_url, alarmType)
+
+        return self._get(self.session, url)
+
+
