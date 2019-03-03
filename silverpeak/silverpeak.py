@@ -284,5 +284,12 @@ class Silverpeak(object):
         """
         url = '{0}/appliance/denied'.format(self.base_url)
         return self._get(self.session, url)
-
+    
+    def get_interfaces(self, interfaceID, cashed='true'):
+        """
+        Reurns **********
+        :return: Result ***********
+        """
+        url = '{0}/interfaceState/{}?cached={}'.format(self.base_url, interfaceID, cashed.lower())
+        return self._get(self.session, url)
 
