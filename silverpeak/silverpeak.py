@@ -363,4 +363,9 @@ class Silverpeak(object):
 
         return self._get(self.session, url)
 
-
+    def put_preconfig(self, createPreconfig):
+        """
+        """
+        url = '{}/appliance/preconfiguration'.format(self.base_url, alarmType)
+        
+        return self._put(self.session, url)
