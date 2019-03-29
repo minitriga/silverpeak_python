@@ -363,9 +363,39 @@ class Silverpeak(object):
 
         return self._get(self.session, url)
 
-    def put_preconfig(self, createPreconfig):
+    def post_preconfig(self, name, serialNum, tag, comment, configData, autoApply=None):
         """
+        Create a preconfiguration
+        :param name: name of the preconfig
+        :param serialNum: Serial Number of the EC
+        :param tag: Tag of the EC
+        :param comment: Comment of the preconfig
+        :param autoApply: True/false automatically approve EC when discovered
+        :param configData: YAML file containing variables
         """
-        url = '{}/appliance/preconfiguration'.format(self.base_url, alarmType)
-        
-        return self._put(self.session, url)
+        try:
+            import base64
+            import json
+        except ImportError:
+            raise ImportError('Failed to import module')
+
+        if autoApply is None:
+            autoApply = True
+
+        base64_bytes = base64.b64encode(configData)
+
+        encodedConfig = base64_bytes.decode('utf-8')
+
+        preConfig = { "name": name, "serialNum": serialNum, "tag": tag, "comment": comment, "autoApply": autoApply, "configData": encodedConfig }
+
+        preConfig = json.dumps(preConfig)
+
+        url = '{}/gms/appliance/preconfiguration'.format(self.base_url)
+
+        return self._post(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                data=preConfig,
+                timeout=self.timeout
+               )
