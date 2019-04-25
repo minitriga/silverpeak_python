@@ -399,3 +399,31 @@ class Silverpeak(object):
                 data=preConfig,
                 timeout=self.timeout
                )
+        
+    def reboot_appliance(self, applianceID, factoryReset=None):
+        """
+        Reboot appliance with or without factory reset
+        :param applianceID: The node ID of the appliance
+        :param factoryReset: Factory reset True False
+        :return: Result named tuple
+        """
+        url = '{}/appliance/rest/{}/reboot'.format(self.base_url, applianceID)
+
+        if factoryReset is None:
+            data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0}'
+        else:
+            data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0,"reset_factory":true,"support_bypass":false}'
+        print(url)
+        return self._post(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                data=data,
+                timeout=self.timeout
+                )
+
+
+
+
+
+
