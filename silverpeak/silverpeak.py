@@ -399,7 +399,7 @@ class Silverpeak(object):
                 data=preConfig,
                 timeout=self.timeout
                )
-        
+
     def reboot_appliance(self, applianceID, factoryReset=None):
         """
         Reboot appliance with or without factory reset
@@ -413,7 +413,7 @@ class Silverpeak(object):
             data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0}'
         else:
             data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0,"reset_factory":true,"support_bypass":false}'
-        print(url)
+
         return self._post(
                 session=self.session,
                 url=url,
@@ -422,8 +422,44 @@ class Silverpeak(object):
                 timeout=self.timeout
                 )
 
+    def boost_appliance(self, applianceID, plus=False, boost=False, boostBandwidth=0):
+        """
+        Configure Boost on an appliance
+        :param applianceID: The node ID of the appliance
+        :param mini: enable or disable the mini licence
+        :param plus: enable or disable the plus licence
+        :param boost: enable or disable the boost licence
+        :param boostBandwidth: choose bandwidth to boost by
+        """
+        try:
+            import json
+        except ImportError:
+            raise ImportError('Failed to import module')
 
+        url = '{}/license/portal/ec/{}'.format(self.base_url, applianceID)
 
+        boostBandwidth = int(boostBandwidth)
 
+        data = {
+                "license": {
+                   "plus": {
+                      "enable": plus
+                   },
+                   "boost": {
+                      "enable": boost,
+                      "bandwidth": boostBandwidth
+                   }
+                }
+               }
 
+        data = json.dumps(data)
 
+        print(url)
+        print(data)
+        return self._post(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                data=data,
+                timeout=self.timeout
+                )
