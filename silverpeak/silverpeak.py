@@ -454,8 +454,6 @@ class Silverpeak(object):
 
         data = json.dumps(data)
 
-        print(url)
-        print(data)
         return self._post(
                 session=self.session,
                 url=url,
