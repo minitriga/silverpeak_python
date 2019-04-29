@@ -471,3 +471,46 @@ class Silverpeak(object):
         url = '{}/license/portal/summary'.format(self.base_url)
         
         return self._get(self.session, url)
+
+    def get_licence_appliance(self):
+        """
+        Retrieves portal licensed appliances
+        :return: Result named tuple
+        """
+        url = '{}/license/portal/appliance'.format(self.base_url)
+
+        return self._get(self.session, url)
+
+    def grant_licence(self, applianceID):
+        """
+        Grant an appliance a base license via Cloud Portal
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple
+        """
+        url = '{}/license/portal/appliance/grant/{}'.format(self.base_url, applianceID)
+
+        return self._post(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                json=applianceID,
+                timeout=self.timeout
+               )
+
+    def revoke_licence(self, applianceID):
+        """
+        Revoke an appliance a base license via Cloud Portal
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple
+        """
+        url = '{}/license/portal/appliance/revoke/{}'.format(self.base_url, applianceID)
+
+        return self._post(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                json=applianceID,
+                timeout=self.timeout
+               )
+
+
