@@ -426,9 +426,9 @@ class Silverpeak(object):
         """
         Configure Boost on an appliance
         :param applianceID: The node ID of the appliance
-        :param mini: enable or disable the mini licence
-        :param plus: enable or disable the plus licence
-        :param boost: enable or disable the boost licence
+        :param mini: enable or disable the mini license
+        :param plus: enable or disable the plus license
+        :param boost: enable or disable the boost license
         :param boostBandwidth: choose bandwidth to boost by
         :return: Result named tuple
         """
@@ -463,16 +463,18 @@ class Silverpeak(object):
                 timeout=self.timeout
                 )
 
-    def get_licence_summary(self):
+    def get_license_summary(self):
         """
-        Retrieves summary of portal licensed appliances
+        Retrieves summary of portal 
+        
+        sed appliances
         :return: Result named tuple
         """
         url = '{}/license/portal/summary'.format(self.base_url)
         
         return self._get(self.session, url)
 
-    def get_licence_appliance(self):
+    def get_license_appliance(self):
         """
         Retrieves portal licensed appliances
         :return: Result named tuple
@@ -481,7 +483,7 @@ class Silverpeak(object):
 
         return self._get(self.session, url)
 
-    def grant_licence(self, applianceID):
+    def grant_license(self, applianceID):
         """
         Grant an appliance a base license via Cloud Portal
         :param applianceID: The node ID of the appliance
@@ -497,7 +499,7 @@ class Silverpeak(object):
                 timeout=self.timeout
                )
 
-    def revoke_licence(self, applianceID):
+    def revoke_license(self, applianceID):
         """
         Revoke an appliance a base license via Cloud Portal
         :param applianceID: The node ID of the appliance
