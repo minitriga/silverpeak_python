@@ -430,6 +430,7 @@ class Silverpeak(object):
         :param plus: enable or disable the plus licence
         :param boost: enable or disable the boost licence
         :param boostBandwidth: choose bandwidth to boost by
+        :return: Result named tuple
         """
         try:
             import json
@@ -461,3 +462,12 @@ class Silverpeak(object):
                 data=data,
                 timeout=self.timeout
                 )
+
+    def get_licence_summary(self):
+        """
+        Retrieves summary of portal licensed appliances
+        :return: Result named tuple
+        """
+        url = '{}/license/portal/summary'.format(self.base_url)
+        
+        return self._get(self.session, url)
