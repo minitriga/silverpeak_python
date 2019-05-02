@@ -5,6 +5,7 @@ from requests.exceptions import ConnectionError
 
 HTTP_SUCCESS_CODES = {
     200: 'Success',
+    204: 'No Content',
 }
 
 HTTP_ERROR_CODES = {
@@ -190,6 +191,43 @@ class Silverpeak(object):
             json = dict()
 
         return parse_response(session.post(url=url, headers=headers, data=data, json=json, timeout=timeout))
+   
+    @staticmethod
+    def _put(session, url, headers=None, data=None, json=None, timeout=10):
+        """
+        Perform a HTTP put
+        :param session: requests session
+        :param url: url to put
+        :param headers: HTTP headers
+        :param data: Data payload
+        :param timeout: Timeout for request response
+        :return:
+        """
+        if headers is None:
+            # add default headers for post
+            headers = {'Connection': 'keep-alive',
+                       'Content-Type': 'application/json'}
+
+        return parse_response(session.put(url=url, headers=headers, data=data, json=json, timeout=timeout))
+
+    @staticmethod
+    def _delete(session, url, headers=None, timeout=10):
+        """
+        Perform a HTTP delete
+        :param session: requests session
+        :param url: url to delete
+        :param headers: HTTP headers
+        :param timeout: Timeout for request response
+        :return:
+        """
+        if headers is None:
+            # add default headers for post
+            headers = {'Connection': 'keep-alive',
+                       'Content-Type': 'application/json'}
+
+
+        return parse_response(session.delete(url=url, headers=headers, timeout=timeout))
+
 
     def get_appliances(self):
         """
@@ -198,6 +236,16 @@ class Silverpeak(object):
         """
         url = '{}/appliance'.format(self.base_url)
         return self._get(self.session, url)
+
+    def delete_appliance(self, applianceID):
+        """
+        Delete appliance from Orchestrator and Cloud Portal
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple
+        """
+        url = '{}/appliance/{}'.format(self.base_url, applianceID)
+
+        return self._delete(self.session, url)
 
     def get_appliance(self, applianceID):
         """
@@ -514,5 +562,86 @@ class Silverpeak(object):
                 json=applianceID,
                 timeout=self.timeout
                )
+
+    def get_overlay_data(self, overlayID):
+        """
+        Get current overlay info for overlayID
+        :param overlayID: The ID of the BIO
+        :return: Result named tuple.
+        """
+        url = '{}/gms/overlays/config/{}'.format(self.base_url, overlayID)
+        return self._get(self.session, url)
+
+            
+    def push_overlay_data(self, overlayID, overlayData):
+        """
+        Update BIO info for overlayID
+        :param overlayID: The ID of the BIO
+        :param overlayData: overlay config in json format
+        :return: Result named tuple
+        """
+        url = '{}/gms/overlays/config/{}'.format(self.base_url, overlayID)
+
+        return self._put(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                data=overlayData,
+                timeout=self.timeout
+                )
+
+    def get_sec_policy(self, applianceID):
+        """
+        Get deployment info from appliance
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple.
+        """
+        url = '{}/appliance/rest/{}/securityMaps'.format(self.base_url, applianceID)
+        return self._get(self.session, url)
+
+    def push_sec_policy(self, applianceID, secPolData):
+        """
+        Update security policy of appliance
+        :param applianceID: The node ID of the appliance
+        :param secPolData: security policy config in json format
+        :return: Result named tuple
+        """
+        url = '{}/appliance/rest/{}/securityMaps'.format(self.base_url, applianceID)
+
+        return self._post(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                data=secPolData,
+                timeout=self.timeout
+                )
+
+    def get_deployment_data(self, applianceID):
+        """
+        Get deployment info from appliance
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple.
+        """
+        url = '{}/appliance/rest/{}/deployment'.format(self.base_url, applianceID)
+        return self._get(self.session, url)
+
+
+    def push_deployment_data(self, applianceID, deploymentData):
+        """
+        Update deployment config of appliance
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple
+        """
+        url = '{}/appliance/rest/{}/deployment'.format(self.base_url, applianceID)
+        timeout = 120
+
+        return self._post(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                data=deploymentData,
+                timeout=timeout
+                )
+
 
 
