@@ -371,7 +371,7 @@ class Silverpeak(object):
     def get_device_alarms(self, applianceID, view='all',
                           severity='', order='', maxAlarms=5):
         """
-        Reurns active, historical, or all alarms for appliances whos id's are provided in the request body
+        Returns active, historical, or all alarms for appliances whos id's are provided in the request body
         :param applianceID: The node ID of the appliance
         :param view: Filters arams by active, closed, all
         :param severity: Filters alarms by severity (warning, minor, major, critical)
