@@ -101,7 +101,8 @@ def parse_response(response):
 
 
 class Silverpeak(object):
-    def __init__(self, user, user_pass, sp_server, sp_port="443", verify=False, disable_warnings=False, timeout=10, auto_login=True):
+    def __init__(self, user, user_pass, sp_server, sp_port="443",
+                 verify=False, disable_warnings=False, timeout=10, auto_login=True):
         self.user = user
         self.user_pass = user_pass
         self.sp_server = sp_server
@@ -167,7 +168,8 @@ class Silverpeak(object):
             headers = {'Connection': 'keep-alive',
                        'Content-Type': 'application/json'}
 
-        return parse_response(session.get(url=url, headers=headers, timeout=timeout))
+        return parse_response(session.get(
+            url=url, headers=headers, timeout=timeout))
 
     @staticmethod
     def _post(session, url, headers=None, data=None, json=None, timeout=10):
@@ -191,7 +193,8 @@ class Silverpeak(object):
         if json is None:
             json = dict()
 
-        return parse_response(session.post(url=url, headers=headers, data=data, json=json, timeout=timeout))
+        return parse_response(session.post(
+            url=url, headers=headers, data=data, json=json, timeout=timeout))
 
     @staticmethod
     def _put(session, url, headers=None, data=None, json=None, timeout=10):
@@ -209,7 +212,8 @@ class Silverpeak(object):
             headers = {'Connection': 'keep-alive',
                        'Content-Type': 'application/json'}
 
-        return parse_response(session.put(url=url, headers=headers, data=data, json=json, timeout=timeout))
+        return parse_response(session.put(
+            url=url, headers=headers, data=data, json=json, timeout=timeout))
 
     @staticmethod
     def _delete(session, url, headers=None, timeout=10):
@@ -226,7 +230,8 @@ class Silverpeak(object):
             headers = {'Connection': 'keep-alive',
                        'Content-Type': 'application/json'}
 
-        return parse_response(session.delete(url=url, headers=headers, timeout=timeout))
+        return parse_response(session.delete(
+            url=url, headers=headers, timeout=timeout))
 
     def get_appliances(self):
         """
@@ -363,7 +368,8 @@ class Silverpeak(object):
 
         return self._get(self.session, url)
 
-    def get_device_alarms(self, applianceID, view='all', severity='', order='', maxAlarms=5):
+    def get_device_alarms(self, applianceID, view='all',
+                          severity='', order='', maxAlarms=5):
         """
         Reurns active, historical, or all alarms for appliances whos id's are provided in the request body
         :param applianceID: The node ID of the appliance
@@ -423,7 +429,8 @@ class Silverpeak(object):
 
         return self._get(self.session, url)
 
-    def post_preconfig(self, name, serialNum, tag, comment, configData, autoApply=None):
+    def post_preconfig(self, name, serialNum, tag, comment,
+                       configData, autoApply=None):
         """
         Create a preconfiguration
         :param name: name of the preconfig
@@ -483,7 +490,8 @@ class Silverpeak(object):
             timeout=self.timeout
         )
 
-    def boost_appliance(self, applianceID, plus=False, boost=False, boostBandwidth=0):
+    def boost_appliance(self, applianceID, plus=False,
+                        boost=False, boostBandwidth=0):
         """
         Configure Boost on an appliance
         :param applianceID: The node ID of the appliance
