@@ -5,6 +5,7 @@ from requests.exceptions import ConnectionError
 
 HTTP_SUCCESS_CODES = {
     200: 'Success',
+    204: 'No Content',
 }
 
 HTTP_ERROR_CODES = {
@@ -162,6 +163,7 @@ class Silverpeak(object):
         :return:
         """
         if headers is None:
+            # add default headers for get
             headers = {'Connection': 'keep-alive',
                        'Content-Type': 'application/json'}
 
@@ -190,6 +192,41 @@ class Silverpeak(object):
             json = dict()
 
         return parse_response(session.post(url=url, headers=headers, data=data, json=json, timeout=timeout))
+   
+    @staticmethod
+    def _put(session, url, headers=None, data=None, json=None, timeout=10):
+        """
+        Perform a HTTP put
+        :param session: requests session
+        :param url: url to put
+        :param headers: HTTP headers
+        :param data: Data payload
+        :param timeout: Timeout for request response
+        :return:
+        """
+        if headers is None:
+            # add default headers for put
+            headers = {'Connection': 'keep-alive',
+                       'Content-Type': 'application/json'}
+
+        return parse_response(session.put(url=url, headers=headers, data=data, json=json, timeout=timeout))
+
+    @staticmethod
+    def _delete(session, url, headers=None, timeout=10):
+        """
+        Perform a HTTP delete
+        :param session: requests session
+        :param url: url to delete
+        :param headers: HTTP headers
+        :param timeout: Timeout for request response
+        :return:
+        """
+        if headers is None:
+            # add default headers for delete
+            headers = {'Connection': 'keep-alive',
+                       'Content-Type': 'application/json'}
+
+        return parse_response(session.delete(url=url, headers=headers, timeout=timeout))
 
     def get_appliances(self):
         """
@@ -197,7 +234,18 @@ class Silverpeak(object):
         :return: Result named tuple.
         """
         url = '{}/appliance'.format(self.base_url)
+
         return self._get(self.session, url)
+
+    def delete_appliance(self, applianceID):
+        """
+        Delete appliance from Orchestrator and Cloud Portal
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple
+        """
+        url = '{}/appliance/{}'.format(self.base_url, applianceID)
+
+        return self._delete(self.session, url)
 
     def get_appliance(self, applianceID):
         """
@@ -206,6 +254,7 @@ class Silverpeak(object):
         :return: Result named tuple.
         """
         url = '{}/appliance/{}'.format(self.base_url, applianceID)
+
         return self._get(self.session, url)
 
     def get_reach_app(self, applianceID):
@@ -215,6 +264,7 @@ class Silverpeak(object):
         :return: Result named tuple.
         """
         url = '{}/reachability/appliance/{}'.format(self.base_url, applianceID)
+
         return self._get(self.session, url)
 
     def get_reach_gms(self, applianceID):
@@ -224,6 +274,7 @@ class Silverpeak(object):
         :return: Result named tuple.
         """
         url = '{}/reachability/gms/{}'.format(self.base_url, applianceID)
+
         return self._get(self.session, url)
 
     def get_groups(self):
@@ -232,6 +283,7 @@ class Silverpeak(object):
         :return: Result named tuple.
         """
         url = '{}/gms/group'.format(self.base_url)
+
         return self._get(self.session, url)
 
     def get_group(self, groupID):
@@ -241,6 +293,7 @@ class Silverpeak(object):
         :return: Result named tuple.
         """
         url = '{}/gms/group/{}'.format(self.base_url, groupID)
+
         return self._get(self.session, url)
 
     def get_group_root(self):
@@ -249,6 +302,7 @@ class Silverpeak(object):
         :return: Result named tuple.
         """
         url = '{}/gms/group/root'.format(self.base_url)
+
         return self._get(self.session, url)
 
     def get_grnodes(self):
@@ -257,6 +311,7 @@ class Silverpeak(object):
         :return: Result named tuple.
         """
         url = '{}/gms/grNode'.format(self.base_url)
+
         return self._get(self.session, url)
 
     def get_grnode(self, nodeID):
@@ -266,6 +321,7 @@ class Silverpeak(object):
         :return: Result named tuple.
         """
         url = '{}/gms/grNode/{}'.format(self.base_url, nodeID)
+
         return self._get(self.session, url)
 
     def get_discovered(self):
@@ -274,6 +330,7 @@ class Silverpeak(object):
         :return: Result named tuple
         """
         url = '{}/appliance/discovered'.format(self.base_url)
+
         return self._get(self.session, url)
 
     def get_approved(self):
@@ -282,6 +339,7 @@ class Silverpeak(object):
         :return: Result named tuple
         """
         url = '{}/appliance/approved'.format(self.base_url)
+
         return self._get(self.session, url)
 
     def get_denied(self):
@@ -290,6 +348,7 @@ class Silverpeak(object):
         :return: Result named tuple
         """
         url = '{}/appliance/denied'.format(self.base_url)
+
         return self._get(self.session, url)
 
     def get_interfaces(self, applianceID, cashed='true'):
@@ -301,6 +360,7 @@ class Silverpeak(object):
         """
         url = '{}/interfaceState/{}?cached={}'.format(
             self.base_url, applianceID, cashed.lower())
+
         return self._get(self.session, url)
 
     def get_device_alarms(self, applianceID, view='all', severity='', order='', maxAlarms=5):
@@ -343,7 +403,7 @@ class Silverpeak(object):
             url = '{}&severity={}'.format(url, severity)
 
         return self._get(self.session, url)
-   
+
     def get_alarm_summary(self):
         """
         Returns summary of active Orchestrator alarms as well as summary of active alarms across all appliances
@@ -465,13 +525,13 @@ class Silverpeak(object):
 
     def get_license_summary(self):
         """
-        Retrieves summary of portal 
-        
+        Retrieves summary of portal
+
         sed appliances
         :return: Result named tuple
         """
         url = '{}/license/portal/summary'.format(self.base_url)
-        
+
         return self._get(self.session, url)
 
     def get_license_appliance(self):
@@ -515,4 +575,85 @@ class Silverpeak(object):
                 timeout=self.timeout
                )
 
+    def get_overlay_data(self, overlayID):
+        """
+        Get current overlay info for overlayID
+        :param overlayID: The ID of the BIO
+        :return: Result named tuple.
+        """
+        url = '{}/gms/overlays/config/{}'.format(self.base_url, overlayID)
 
+        return self._get(self.session, url)
+
+
+    def post_overlay_data(self, overlayID, overlayData):
+        """
+        Update BIO info for overlayID
+        :param overlayID: The ID of the BIO
+        :param overlayData: overlay config in json format
+        :return: Result named tuple
+        """
+        url = '{}/gms/overlays/config/{}'.format(self.base_url, overlayID)
+
+        return self._put(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                data=overlayData,
+                timeout=self.timeout
+                )
+
+    def get_sec_policy(self, applianceID):
+        """
+        Get deployment info from appliance
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple.
+        """
+        url = '{}/appliance/rest/{}/securityMaps'.format(self.base_url, applianceID)
+
+        return self._get(self.session, url)
+
+    def post_sec_policy(self, applianceID, secPolData):
+        """
+        Update security policy of appliance
+        :param applianceID: The node ID of the appliance
+        :param secPolData: security policy config in json format
+        :return: Result named tuple
+        """
+        url = '{}/appliance/rest/{}/securityMaps'.format(self.base_url, applianceID)
+
+        return self._post(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                data=secPolData,
+                timeout=self.timeout
+                )
+
+    def get_deployment_data(self, applianceID):
+        """
+        Get deployment info from appliance
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple.
+        """
+        url = '{}/appliance/rest/{}/deployment'.format(self.base_url, applianceID)
+
+        return self._get(self.session, url)
+
+    def post_deployment_data(self, applianceID, deploymentData):
+        """
+        Update deployment config of appliance
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple
+        """
+        url = '{}/appliance/rest/{}/deployment'.format(self.base_url, applianceID)
+
+        timeout = 120
+
+        return self._post(
+                session=self.session,
+                url=url,
+                headers={'Content-Type': 'application/json'},
+                data=deploymentData,
+                timeout=timeout
+                )
