@@ -101,7 +101,8 @@ def parse_response(response):
 
 
 class Silverpeak(object):
-    def __init__(self, user, user_pass, sp_server, sp_port="443", verify=False, disable_warnings=False, timeout=10, auto_login=True):
+    def __init__(self, user, user_pass, sp_server, sp_port="443",
+                 verify=False, disable_warnings=False, timeout=10, auto_login=True):
         self.user = user
         self.user_pass = user_pass
         self.sp_server = sp_server
@@ -167,7 +168,8 @@ class Silverpeak(object):
             headers = {'Connection': 'keep-alive',
                        'Content-Type': 'application/json'}
 
-        return parse_response(session.get(url=url, headers=headers, timeout=timeout))
+        return parse_response(session.get(
+            url=url, headers=headers, timeout=timeout))
 
     @staticmethod
     def _post(session, url, headers=None, data=None, json=None, timeout=10):
@@ -191,8 +193,9 @@ class Silverpeak(object):
         if json is None:
             json = dict()
 
-        return parse_response(session.post(url=url, headers=headers, data=data, json=json, timeout=timeout))
-   
+        return parse_response(session.post(
+            url=url, headers=headers, data=data, json=json, timeout=timeout))
+
     @staticmethod
     def _put(session, url, headers=None, data=None, json=None, timeout=10):
         """
@@ -209,7 +212,8 @@ class Silverpeak(object):
             headers = {'Connection': 'keep-alive',
                        'Content-Type': 'application/json'}
 
-        return parse_response(session.put(url=url, headers=headers, data=data, json=json, timeout=timeout))
+        return parse_response(session.put(
+            url=url, headers=headers, data=data, json=json, timeout=timeout))
 
     @staticmethod
     def _delete(session, url, headers=None, timeout=10):
@@ -226,7 +230,8 @@ class Silverpeak(object):
             headers = {'Connection': 'keep-alive',
                        'Content-Type': 'application/json'}
 
-        return parse_response(session.delete(url=url, headers=headers, timeout=timeout))
+        return parse_response(session.delete(
+            url=url, headers=headers, timeout=timeout))
 
     def get_appliances(self):
         """
@@ -363,9 +368,10 @@ class Silverpeak(object):
 
         return self._get(self.session, url)
 
-    def get_device_alarms(self, applianceID, view='all', severity='', order='', maxAlarms=5):
+    def get_device_alarms(self, applianceID, view='all',
+                          severity='', order='', maxAlarms=5):
         """
-        Reurns active, historical, or all alarms for appliances whos id's are provided in the request body
+        Returns active, historical, or all alarms for appliances whos id's are provided in the request body
         :param applianceID: The node ID of the appliance
         :param view: Filters arams by active, closed, all
         :param severity: Filters alarms by severity (warning, minor, major, critical)
@@ -380,15 +386,15 @@ class Silverpeak(object):
             url = '{}&severity={}'.format(url, severity)
 
         if order:
-             url = '{}&order={}'.format(url, order)
+            url = '{}&order={}'.format(url, order)
 
         return self._post(
-                session=self.session,
-                url=url,
-                headers={'Content-Type': 'application/json'},
-                json=applianceID,
-                timeout=self.timeout
-               )
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            json=applianceID,
+            timeout=self.timeout
+        )
 
     def get_alarms(self, view='all', severity=''):
         """
@@ -423,7 +429,8 @@ class Silverpeak(object):
 
         return self._get(self.session, url)
 
-    def post_preconfig(self, name, serialNum, tag, comment, configData, autoApply=None):
+    def post_preconfig(self, name, serialNum, tag, comment,
+                       configData, autoApply=None):
         """
         Create a preconfiguration
         :param name: name of the preconfig
@@ -446,19 +453,20 @@ class Silverpeak(object):
 
         encodedConfig = base64_bytes.decode('utf-8')
 
-        preConfig = { "name": name, "serialNum": serialNum, "tag": tag, "comment": comment, "autoApply": autoApply, "configData": encodedConfig }
+        preConfig = {"name": name, "serialNum": serialNum, "tag": tag,
+                     "comment": comment, "autoApply": autoApply, "configData": encodedConfig}
 
         preConfig = json.dumps(preConfig)
 
         url = '{}/gms/appliance/preconfiguration'.format(self.base_url)
 
         return self._post(
-                session=self.session,
-                url=url,
-                headers={'Content-Type': 'application/json'},
-                data=preConfig,
-                timeout=self.timeout
-               )
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            data=preConfig,
+            timeout=self.timeout
+        )
 
     def reboot_appliance(self, applianceID, factoryReset=None):
         """
@@ -475,14 +483,15 @@ class Silverpeak(object):
             data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0,"reset_factory":true,"support_bypass":false}'
 
         return self._post(
-                session=self.session,
-                url=url,
-                headers={'Content-Type': 'application/json'},
-                data=data,
-                timeout=self.timeout
-                )
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            data=data,
+            timeout=self.timeout
+        )
 
-    def boost_appliance(self, applianceID, plus=False, boost=False, boostBandwidth=0):
+    def boost_appliance(self, applianceID, plus=False,
+                        boost=False, boostBandwidth=0):
         """
         Configure Boost on an appliance
         :param applianceID: The node ID of the appliance
@@ -502,26 +511,26 @@ class Silverpeak(object):
         boostBandwidth = int(boostBandwidth)
 
         data = {
-                "license": {
-                   "plus": {
-                      "enable": plus
-                   },
-                   "boost": {
-                      "enable": boost,
-                      "bandwidth": boostBandwidth
-                   }
+            "license": {
+                "plus": {
+                    "enable": plus
+                },
+                "boost": {
+                    "enable": boost,
+                    "bandwidth": boostBandwidth
                 }
-               }
+            }
+        }
 
         data = json.dumps(data)
 
         return self._post(
-                session=self.session,
-                url=url,
-                headers={'Content-Type': 'application/json'},
-                data=data,
-                timeout=self.timeout
-                )
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            data=data,
+            timeout=self.timeout
+        )
 
     def get_license_summary(self):
         """
@@ -549,15 +558,16 @@ class Silverpeak(object):
         :param applianceID: The node ID of the appliance
         :return: Result named tuple
         """
-        url = '{}/license/portal/appliance/grant/{}'.format(self.base_url, applianceID)
+        url = '{}/license/portal/appliance/grant/{}'.format(
+            self.base_url, applianceID)
 
         return self._post(
-                session=self.session,
-                url=url,
-                headers={'Content-Type': 'application/json'},
-                json=applianceID,
-                timeout=self.timeout
-               )
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            json=applianceID,
+            timeout=self.timeout
+        )
 
     def revoke_license(self, applianceID):
         """
@@ -565,15 +575,16 @@ class Silverpeak(object):
         :param applianceID: The node ID of the appliance
         :return: Result named tuple
         """
-        url = '{}/license/portal/appliance/revoke/{}'.format(self.base_url, applianceID)
+        url = '{}/license/portal/appliance/revoke/{}'.format(
+            self.base_url, applianceID)
 
         return self._post(
-                session=self.session,
-                url=url,
-                headers={'Content-Type': 'application/json'},
-                json=applianceID,
-                timeout=self.timeout
-               )
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            json=applianceID,
+            timeout=self.timeout
+        )
 
     def get_overlay_data(self, overlayID):
         """
@@ -585,7 +596,6 @@ class Silverpeak(object):
 
         return self._get(self.session, url)
 
-
     def post_overlay_data(self, overlayID, overlayData):
         """
         Update BIO info for overlayID
@@ -596,12 +606,12 @@ class Silverpeak(object):
         url = '{}/gms/overlays/config/{}'.format(self.base_url, overlayID)
 
         return self._put(
-                session=self.session,
-                url=url,
-                headers={'Content-Type': 'application/json'},
-                data=overlayData,
-                timeout=self.timeout
-                )
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            data=overlayData,
+            timeout=self.timeout
+        )
 
     def get_sec_policy(self, applianceID):
         """
@@ -609,7 +619,8 @@ class Silverpeak(object):
         :param applianceID: The node ID of the appliance
         :return: Result named tuple.
         """
-        url = '{}/appliance/rest/{}/securityMaps'.format(self.base_url, applianceID)
+        url = '{}/appliance/rest/{}/securityMaps'.format(
+            self.base_url, applianceID)
 
         return self._get(self.session, url)
 
@@ -620,15 +631,16 @@ class Silverpeak(object):
         :param secPolData: security policy config in json format
         :return: Result named tuple
         """
-        url = '{}/appliance/rest/{}/securityMaps'.format(self.base_url, applianceID)
+        url = '{}/appliance/rest/{}/securityMaps'.format(
+            self.base_url, applianceID)
 
         return self._post(
-                session=self.session,
-                url=url,
-                headers={'Content-Type': 'application/json'},
-                data=secPolData,
-                timeout=self.timeout
-                )
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            data=secPolData,
+            timeout=self.timeout
+        )
 
     def get_deployment_data(self, applianceID):
         """
@@ -636,7 +648,8 @@ class Silverpeak(object):
         :param applianceID: The node ID of the appliance
         :return: Result named tuple.
         """
-        url = '{}/appliance/rest/{}/deployment'.format(self.base_url, applianceID)
+        url = '{}/appliance/rest/{}/deployment'.format(
+            self.base_url, applianceID)
 
         return self._get(self.session, url)
 
@@ -646,14 +659,15 @@ class Silverpeak(object):
         :param applianceID: The node ID of the appliance
         :return: Result named tuple
         """
-        url = '{}/appliance/rest/{}/deployment'.format(self.base_url, applianceID)
+        url = '{}/appliance/rest/{}/deployment'.format(
+            self.base_url, applianceID)
 
         timeout = 120
 
         return self._post(
-                session=self.session,
-                url=url,
-                headers={'Content-Type': 'application/json'},
-                data=deploymentData,
-                timeout=timeout
-                )
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            data=deploymentData,
+            timeout=timeout
+        )

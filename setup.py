@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="silverpeak",
-    version="0.0.3.6",
+    version="0.0.3.7",
     author="Alex Gittings, Adam Jarvis",
     author_email="alexgit@hotmail.co.uk, adamjohnjarvis1@gmail.com",
     description="A package to allow you to interact with the Silver Peak Orchestrator API",
