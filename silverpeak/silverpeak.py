@@ -671,3 +671,14 @@ class Silverpeak(object):
             data=deploymentData,
             timeout=timeout
         )
+
+    def get_port_forwarding_rules(self, applianceID):
+        """
+        Get inbound port forwarding rules from appliance
+        :param applianceID: The node ID of the appliance
+        :return: Result named tuple
+        """
+        url = '{}/portForwarding/{}'.format(
+            self.base_url, applianceID)
+
+        return self._get(self.session, url)
