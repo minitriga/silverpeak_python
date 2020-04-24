@@ -1,7 +1,9 @@
-import requests
-from . exceptions import LoginCredentialsError, LoginTimeoutError
 from collections import namedtuple
+
+import requests
 from requests.exceptions import ConnectionError
+
+from .exceptions import LoginCredentialsError, LoginTimeoutError
 
 HTTP_SUCCESS_CODES = {
     200: 'Success',
@@ -67,14 +69,18 @@ def parse_http_error(response):
     :param response: requests response object
     :return: namedtuple result object
     """
+
     try:
         json_response = dict()
         reason = response.json()['error']['details']
         error = response.json()['error']['message']
     except ValueError as e:
         json_response = dict()
-        reason = HTTP_RESPONSE_CODES[response.status_code]
         error = e
+        if HTTP_RESPONSE_CODES[response.status_code]:
+            reason = HTTP_RESPONSE_CODES[response.status_code]
+        if response.text:
+            error = response.text
 
     result = Result(
         ok=response.ok,
