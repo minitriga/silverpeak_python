@@ -722,7 +722,7 @@ class Silverpeak(object):
 
     def post_interface_labels(self, interfaceLabelsData, deleteDependencies=None):
         """
-        Interface labels will be saved, completely replacing the current implementation.
+        Save interface labels, completely replacing the current implementation.
         You cannot remove labels that are in use in an overlay
         :param interfaceLabelsData: Object of labels (in json) to save
         (will overwrite the current lan labels list). To remove a label, set the 'active' to false
@@ -749,7 +749,7 @@ class Silverpeak(object):
 
     def get_gms_server_info(self):
         """
-        Returns orchestrator server information such as used disk space, hostname, release, etc...
+        Get orchestrator server information such as used disk space, hostname, release, etc...
         :return: Result named tuple
         """
 
@@ -759,7 +759,7 @@ class Silverpeak(object):
 
     def get_gms_server_brief_info(self):
         """
-        Returns orchestrator server information such as used disk space, hostname, release, etc...
+        Get orchestrator server information such as used disk space, hostname, release, etc...
         :return: Result named tuple
         """
 
