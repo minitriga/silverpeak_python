@@ -480,9 +480,11 @@ class Silverpeak(object):
         url = '{}/appliance/rest/{}/reboot'.format(self.base_url, applianceID)
 
         if factoryReset is None:
-            data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0}'
+            data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,' \
+                   '"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0}'
         else:
-            data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0,"reset_factory":true,"support_bypass":false}'
+            data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,' \
+                   '"empty_db":false,"empty_db_err":false,"delay":0,"reset_factory":true,"support_bypass":false}'
 
         return self._post(
             session=self.session,
