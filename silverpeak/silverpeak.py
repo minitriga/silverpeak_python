@@ -718,3 +718,30 @@ class Silverpeak(object):
             url += '?active=' + str(active).lower()
 
         return self._get(self.session, url)
+
+    def post_interface_labels(self, interfaceLabelsData, deleteDependencies=None):
+        """
+        Interface labels will be saved, completely replacing the current implementation.
+        You cannot remove labels that are in use in an overlay
+        :param interfaceLabelsData: Object of labels (in json) to save
+        (will overwrite the current lan labels list). To remove a label, set the 'active' to false
+        :param deleteDependencies: Boolean flag whether or not you want to delete the labels from port profiles
+        and templates using it.
+        :return: Result named tuple
+        """
+
+        url = '{}/gms/interfaceLabels'.format(self.base_url)
+
+        if deleteDependencies is not None:
+            if deleteDependencies:
+                url += '?deleteDependencies=true'
+            else:
+                url += '?deleteDependencies=false'
+
+        return self._post(
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            data=interfaceLabelsData,
+            timeout=self.timeout
+        )
