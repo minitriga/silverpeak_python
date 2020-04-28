@@ -499,7 +499,6 @@ class Silverpeak(object):
         """
         Configure Boost on an appliance
         :param applianceID: The node ID of the appliance
-        :param mini: enable or disable the mini license
         :param plus: enable or disable the plus license
         :param boost: enable or disable the boost license
         :param boostBandwidth: choose bandwidth to boost by
