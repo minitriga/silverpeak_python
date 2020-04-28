@@ -36,8 +36,10 @@ def parse_http_success(response):
     if response.request.method in ['GET']:
         reason = HTTP_RESPONSE_CODES[response.status_code]
         error = ''
-        if response.json():
+        if 'json' in response.headers.get('Content-Type'):
             json_response = response.json()
+        elif 'text' in response.headers.get('Content-Type'):
+            json_response = response.text
         else:
             json_response = dict()
             reason = HTTP_RESPONSE_CODES[response.status_code]
