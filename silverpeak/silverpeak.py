@@ -659,6 +659,7 @@ class Silverpeak(object):
         """
         Update deployment config of appliance
         :param applianceID: The node ID of the appliance
+        :param deploymentData: Deployment configuration data
         :return: Result named tuple
         """
         url = '{}/appliance/rest/{}/deployment'.format(
