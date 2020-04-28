@@ -746,3 +746,13 @@ class Silverpeak(object):
             data=interfaceLabelsData,
             timeout=self.timeout
         )
+
+    def get_gms_server_info(self):
+        """
+        Returns orchestrator server information such as used disk space, hostname, release, etc...
+        :return: Result named tuple
+        """
+
+        url = '{}/gmsserver/info'.format(self.base_url)
+
+        return self._get(self.session, url)
