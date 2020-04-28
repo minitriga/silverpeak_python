@@ -803,6 +803,3 @@ class Silverpeak(object):
         url = '{}/gmsserver/hello'.format(self.base_url)
 
         return self._get(self.session, url)
-
-    def print_proxies(self):
-        print(self.session.proxies)
