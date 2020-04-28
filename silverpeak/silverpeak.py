@@ -776,3 +776,13 @@ class Silverpeak(object):
         url = '{}/gms/versions'.format(self.base_url)
 
         return self._get(self.session, url)
+
+    def get_gms_operating_system(self):
+        """
+        Get orchestrator operating system type
+        :return: Result named tuple
+        """
+
+        url = '{}/gmsOperatingSystem'.format(self.base_url)
+
+        return self._get(self.session, url)
