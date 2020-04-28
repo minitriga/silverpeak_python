@@ -766,3 +766,13 @@ class Silverpeak(object):
         url = '{}/gmsserver/briefInfo'.format(self.base_url)
 
         return self._get(self.session, url)
+
+    def get_gms_versions(self):
+        """
+        Get available orchestrator versions
+        :return: Result named tuple
+        """
+
+        url = '{}/gms/versions'.format(self.base_url)
+
+        return self._get(self.session, url)
