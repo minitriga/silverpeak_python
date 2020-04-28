@@ -104,7 +104,7 @@ def parse_response(response):
 
 class Silverpeak(object):
     def __init__(self, user, user_pass, sp_server, sp_port="443",
-                 verify=False, disable_warnings=False, timeout=10, auto_login=True):
+                 verify=False, disable_warnings=False, proxies=None, timeout=10, auto_login=True):
         self.user = user
         self.user_pass = user_pass
         self.sp_server = sp_server
@@ -123,6 +123,9 @@ class Silverpeak(object):
         )
 
         self.session = requests.session()
+
+        if proxies is not None:
+            self.session.proxies = proxies
 
         if not self.verify:
             self.session.verify = self.verify
@@ -800,3 +803,6 @@ class Silverpeak(object):
         url = '{}/gmsserver/hello'.format(self.base_url)
 
         return self._get(self.session, url)
+
+    def print_proxies(self):
+        print(self.session.proxies)
