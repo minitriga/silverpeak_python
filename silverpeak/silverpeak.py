@@ -333,7 +333,7 @@ class Silverpeak(object):
 
     def get_discovered(self):
         """
-        Reurns all the discovered appliances
+        Returns all the discovered appliances
         :return: Result named tuple
         """
         url = '{}/appliance/discovered'.format(self.base_url)
@@ -342,7 +342,7 @@ class Silverpeak(object):
 
     def get_approved(self):
         """
-        Reurns all approved appliances
+        Returns all approved appliances
         :return: Result named tuple
         """
         url = '{}/appliance/approved'.format(self.base_url)
@@ -351,7 +351,7 @@ class Silverpeak(object):
 
     def get_denied(self):
         """
-        Reurns all the denied appliances
+        Returns all the denied appliances
         :return: Result named tuple
         """
         url = '{}/appliance/denied'.format(self.base_url)
@@ -360,7 +360,7 @@ class Silverpeak(object):
 
     def get_interfaces(self, applianceID, cashed='true'):
         """
-        Reurns node configuration data from orchestrator database or from the specified appliance
+        Returns node configuration data from orchestrator database or from the specified appliance
         :param applianceID: The node ID of the appliance
         :param cashed: True/false Get from orchestrator/get from appliance
         :return: Result named tuple
@@ -400,8 +400,8 @@ class Silverpeak(object):
 
     def get_alarms(self, view='all', severity=''):
         """
-        Reurns active, historical, or all alarms for appliances whos id's are provided in the request body
-        :param view: Filters arams by active, closed, all
+        Returns active, historical, or all alarms for appliances whos id's are provided in the request body
+        :param view: Filters alarms by active, closed, all
         :param severity: Filters alarms by severity (warning, minor, major, critical)
         :return: Result named tuple
         """
