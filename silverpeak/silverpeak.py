@@ -756,3 +756,13 @@ class Silverpeak(object):
         url = '{}/gmsserver/info'.format(self.base_url)
 
         return self._get(self.session, url)
+
+    def get_gms_server_brief_info(self):
+        """
+        Returns orchestrator server information such as used disk space, hostname, release, etc...
+        :return: Result named tuple
+        """
+
+        url = '{}/gmsserver/briefInfo'.format(self.base_url)
+
+        return self._get(self.session, url)
