@@ -701,18 +701,19 @@ class Silverpeak(object):
             data=portForwardingData,
         )
 
-    def get_interface_labels(self, active=None, label_type=None):
+    def get_interface_labels(self, active=None, labelType=None):
         """
         Get all the interface labels saved
-        :param label_type: Optional, Type of interface that you want to retrieve the list of labels of [wan, lan]
-        :param active: Optional, Boolean flag to return only the active (active = true) or only inactive (active = false)
+        :param labelType: Optional, Type of interface that you want to retrieve the list of labels of [wan, lan]
+        :param active: Optional, Boolean flag to return only the active (active = true) or
+        only inactive (active = false)
         :return: Result named tuple
         """
 
         url = '{}/gms/interfaceLabels'.format(self.base_url)
 
-        if label_type:
-            url += '/' + label_type
+        if labelType:
+            url += '/' + labelType
 
         if active is not None:
             url += '?active=' + str(active).lower()
