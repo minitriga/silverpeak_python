@@ -788,3 +788,13 @@ class Silverpeak(object):
         url = '{}/gmsOperatingSystem'.format(self.base_url)
 
         return self._get(self.session, url)
+
+    def get_gms_server_to_say_hello(self):
+        """
+        Get hello message
+        :return: Result named tuple
+        """
+
+        url = '{}/gmsserver/hello'.format(self.base_url)
+
+        return self._get(self.session, url)
