@@ -712,7 +712,7 @@ class Silverpeak(object):
 
         url = '{}/gms/interfaceLabels'.format(self.base_url)
 
-        if labelType:
+        if labelType is not None:
             url += '/' + labelType
 
         if active is not None:
