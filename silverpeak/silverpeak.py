@@ -38,8 +38,10 @@ def parse_http_success(response):
     if response.request.method in ['GET']:
         reason = HTTP_RESPONSE_CODES[response.status_code]
         error = ''
-        if response.json():
+        if 'json' in response.headers.get('Content-Type'):
             json_response = response.json()
+        elif 'text' in response.headers.get('Content-Type'):
+            json_response = response.text
         else:
             json_response = dict()
             reason = HTTP_RESPONSE_CODES[response.status_code]
@@ -337,7 +339,7 @@ class Silverpeak(object):
 
     def get_discovered(self):
         """
-        Reurns all the discovered appliances
+        Returns all the discovered appliances
         :return: Result named tuple
         """
         url = '{}/appliance/discovered'.format(self.base_url)
@@ -346,7 +348,7 @@ class Silverpeak(object):
 
     def get_approved(self):
         """
-        Reurns all approved appliances
+        Returns all approved appliances
         :return: Result named tuple
         """
         url = '{}/appliance/approved'.format(self.base_url)
@@ -355,7 +357,7 @@ class Silverpeak(object):
 
     def get_denied(self):
         """
-        Reurns all the denied appliances
+        Returns all the denied appliances
         :return: Result named tuple
         """
         url = '{}/appliance/denied'.format(self.base_url)
@@ -364,7 +366,7 @@ class Silverpeak(object):
 
     def get_interfaces(self, applianceID, cashed='true'):
         """
-        Reurns node configuration data from orchestrator database or from the specified appliance
+        Returns node configuration data from orchestrator database or from the specified appliance
         :param applianceID: The node ID of the appliance
         :param cashed: True/false Get from orchestrator/get from appliance
         :return: Result named tuple
@@ -404,8 +406,8 @@ class Silverpeak(object):
 
     def get_alarms(self, view='all', severity=''):
         """
-        Reurns active, historical, or all alarms for appliances whos id's are provided in the request body
-        :param view: Filters arams by active, closed, all
+        Returns active, historical, or all alarms for appliances whos id's are provided in the request body
+        :param view: Filters alarms by active, closed, all
         :param severity: Filters alarms by severity (warning, minor, major, critical)
         :return: Result named tuple
         """
@@ -484,9 +486,11 @@ class Silverpeak(object):
         url = '{}/appliance/rest/{}/reboot'.format(self.base_url, applianceID)
 
         if factoryReset is None:
-            data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0}'
+            data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,' \
+                   '"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0}'
         else:
-            data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,"empty_db":false,"empty_db_err":false,"delay":0,"reset_factory":true,"support_bypass":false}'
+            data = '{"reboot_type":"Normal","save_db":true,"clear_nm":false,"next_partition":false,' \
+                   '"empty_db":false,"empty_db_err":false,"delay":0,"reset_factory":true,"support_bypass":false}'
 
         return self._post(
             session=self.session,
@@ -501,7 +505,6 @@ class Silverpeak(object):
         """
         Configure Boost on an appliance
         :param applianceID: The node ID of the appliance
-        :param mini: enable or disable the mini license
         :param plus: enable or disable the plus license
         :param boost: enable or disable the boost license
         :param boostBandwidth: choose bandwidth to boost by
@@ -663,6 +666,7 @@ class Silverpeak(object):
         """
         Update deployment config of appliance
         :param applianceID: The node ID of the appliance
+        :param deploymentData: Deployment configuration data
         :return: Result named tuple
         """
         url = '{}/appliance/rest/{}/deployment'.format(
@@ -706,3 +710,99 @@ class Silverpeak(object):
             headers={'Content-Type': 'application/json'},
             data=portForwardingData,
         )
+
+    def get_interface_labels(self, active=None, labelType=None):
+        """
+        Get all the interface labels saved
+        :param labelType: Optional, Type of interface that you want to retrieve the list of labels of [wan, lan]
+        :param active: Optional, Boolean flag to return only the active (active = true) or
+        only inactive (active = false)
+        :return: Result named tuple
+        """
+
+        url = '{}/gms/interfaceLabels'.format(self.base_url)
+
+        if labelType is not None:
+            url += '/' + labelType
+
+        if active is not None:
+            url += '?active=' + str(active).lower()
+
+        return self._get(self.session, url)
+
+    def post_interface_labels(self, interfaceLabelsData, deleteDependencies=None):
+        """
+        Save interface labels, completely replacing the current implementation.
+        You cannot remove labels that are in use in an overlay
+        :param interfaceLabelsData: Object of labels (in json) to save
+        (will overwrite the current lan labels list). To remove a label, set the 'active' to false
+        :param deleteDependencies: Boolean flag whether or not you want to delete the labels from port profiles
+        and templates using it.
+        :return: Result named tuple
+        """
+
+        url = '{}/gms/interfaceLabels'.format(self.base_url)
+
+        if deleteDependencies is not None:
+            if deleteDependencies:
+                url += '?deleteDependencies=true'
+            else:
+                url += '?deleteDependencies=false'
+
+        return self._post(
+            session=self.session,
+            url=url,
+            headers={'Content-Type': 'application/json'},
+            data=interfaceLabelsData,
+            timeout=self.timeout
+        )
+
+    def get_gms_server_info(self):
+        """
+        Get orchestrator server information such as used disk space, hostname, release, etc...
+        :return: Result named tuple
+        """
+
+        url = '{}/gmsserver/info'.format(self.base_url)
+
+        return self._get(self.session, url)
+
+    def get_gms_server_brief_info(self):
+        """
+        Get orchestrator server information such as used disk space, hostname, release, etc...
+        :return: Result named tuple
+        """
+
+        url = '{}/gmsserver/briefInfo'.format(self.base_url)
+
+        return self._get(self.session, url)
+
+    def get_gms_versions(self):
+        """
+        Get available orchestrator versions
+        :return: Result named tuple
+        """
+
+        url = '{}/gms/versions'.format(self.base_url)
+
+        return self._get(self.session, url)
+
+    def get_gms_operating_system(self):
+        """
+        Get orchestrator operating system type
+        :return: Result named tuple
+        """
+
+        url = '{}/gmsOperatingSystem'.format(self.base_url)
+
+        return self._get(self.session, url)
+
+    def get_gms_server_to_say_hello(self):
+        """
+        Get hello message
+        :return: Result named tuple
+        """
+
+        url = '{}/gmsserver/hello'.format(self.base_url)
+
+        return self._get(self.session, url)
