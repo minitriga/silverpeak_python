@@ -380,7 +380,7 @@ class Silverpeak(object):
         return self._get(self.session, url)
 
     def get_device_alarms(self, applianceID, view='all',
-                          severity='', order='', maxAlarms=5):
+                          severity='', order='', maxAlarms=5, start_time=None, end_time=None):
         """
         Returns active, historical, or all alarms for appliances whos id's are provided in the request body
         :param applianceID: The node ID of the appliance
@@ -388,6 +388,8 @@ class Silverpeak(object):
         :param severity: Filters alarms by severity (warning, minor, major, critical)
         :param order: Order by alarm severity (true, false)
         :param maxAlarms: How many alarms to show (default=5)
+        :param start_time: EPOCH Time
+        :param end_time: EPOCH Time
         :return: Result named tuple
         """
         url = '{}/alarm/appliance?view={}&maxAlarms={}'.format(
@@ -398,6 +400,12 @@ class Silverpeak(object):
 
         if order:
             url = '{}&order={}'.format(url, order)
+
+        if start_time:
+            url = '{}&to={}'.format(url, start_time)
+
+        if end_time:
+            url = '{}&from={}'.format(url, end_time)
 
         return self._post(
             session=self.session,
