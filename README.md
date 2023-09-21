@@ -1,3 +1,5 @@
+**THIS LIBRARY HAS NOW BEEN ARCHIVED AS I NO LONGER WORK WITH THE SILVERPEAK/ARUBA SDWAN TECHNOLOGY PLEASE SEE THE [EDGECONNECT-PYTHON REPO](https://github.com/SPOpenSource/edgeconnect-python) FOR A MORE UP TO DATE CLIENT.**
+
 # silverpeak_python
 Python library for use with Silver Peak SD-WAN Orchestrator API.  
 Requires [requests](http://docs.python-requests.org/en/master/)
